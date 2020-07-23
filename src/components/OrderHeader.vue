@@ -5,9 +5,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'OrderHeader'
-  }
+export default {
+  name: 'OrderHeader'
+}
 </script>
 
 <style scoped>

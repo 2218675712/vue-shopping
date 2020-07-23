@@ -1,18 +1,14 @@
+// .eslintrc.js
 module.exports = {
+
   root: true,
 
   env: {
     node: true
   },
 
-  extends: [
-    'plugin:vue/essential',
-    '@vue/standard',
-    '@vue/typescript/recommended'
-  ],
-
   parserOptions: {
-    ecmaVersion: 2020
+    parser: 'babel-eslint'
   },
 
   rules: {
@@ -22,7 +18,6 @@ module.exports = {
 
   'extends': [
     'plugin:vue/essential',
-    '@vue/standard',
-    '@vue/typescript/recommended'
+    '@vue/standard'
   ]
 }
