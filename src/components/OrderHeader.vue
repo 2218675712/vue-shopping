@@ -1,13 +1,13 @@
 <template>
 <div>
-  nav-header
+  orderheader
 </div>
 </template>
 
 <script>
-export default {
-  name: 'NavHeader'
-}
+  export default {
+    name: 'OrderHeader'
+  }
 </script>
 
 <style scoped>
