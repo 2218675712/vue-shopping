@@ -9,7 +9,15 @@ export default {
   name: 'App',
   components: {},
   data () {
-    return {}
+    return {
+      res: ''
+    }
+  },
+  mounted () {
+    // 本地加载静态请求json文件
+    this.axios.get('/mock/user/login.json').then((res) => {
+      this.res = res
+    })
   }
 }
 </script>
