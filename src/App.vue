@@ -14,8 +14,14 @@ export default {
     }
   },
   mounted () {
+    /*
     // 本地加载静态请求json文件
     this.axios.get('/mock/user/login.json').then((res) => {
+      this.res = res
+    })
+    */
+    // 本地集成mockjs
+    this.axios.get('/user/login').then((res) => {
       this.res = res
     })
   }
