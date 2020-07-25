@@ -14,38 +14,15 @@ export default {
     }
   },
   mounted () {
-    /*
-    // 本地加载静态请求json文件
-    this.axios.get('/mock/user/login.json').then((res) => {
-      this.res = res
-    })
-    */
-    // 本地集成mockjs
-    this.axios.get('/login').then((res) => {
-      this.res = res
-    })
+
   }
 }
 </script>
 <style lang="scss">
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
-
-  #nav {
-    padding: 30px;
-
-    a {
-      font-weight: bold;
-      color: #2c3e50;
-
-      &.router-link-exact-active {
-        color: #42b983;
-      }
-    }
-  }
+  /*引入初始化样式*/
+  @import "./assets/scss/reset";
+  /*引入配置样式*/
+  @import "./assets/scss/config";
+  /*引入自定义样式*/
+  @import "./assets/scss/bass";
 </style>
