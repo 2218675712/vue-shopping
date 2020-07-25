@@ -11,7 +11,7 @@ if (moke) {
 }
 Vue.use(VueAxios, Axios)
 // 根据前端的跨域方式做调整
-Axios.defaults.baseURL = 'https://www.fastmock.site/mock/29d2d621265b4079440e7585119eeae3/shop'
+Axios.defaults.baseURL = '/api'
 // 根据环境变量获取不同的请求地址
 // Axios.defaults.baseURL=env.baseURL
 // 设置请求超时
@@ -23,7 +23,7 @@ Axios.interceptors.response.use(function (response) {
   let res = response.data
   if (res.status == 0) {
     return res.data
-  } else if (res.status == 10) {
+  } else if (res.status=== 10) {
     window.location.href = '/#/login'
   } else {
     alert(res.msg)
