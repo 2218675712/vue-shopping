@@ -45,76 +45,36 @@
           </div>
           <div class="item-menu">
             <span>RedMi红米</span>
-            <!--            <div class="children"></div>-->
+            <div class="children">
+              <ul>
+                <li class="product" v-for="(item, index) in phoneList" :key="index">
+                  <a :href="'/#/product/'+item.id" target="_blank">
+                    <div class="pro-img">
+                      <img
+                        :src="item.mainImage"
+                        :alt="item.subtitle">
+                    </div>
+                    <div class="pro-name">{{item.name}}</div>
+                    <div class="pro-price">{{item.price|currency}}</div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="item-menu">
             <span>电视</span>
+
             <div class="children">
               <ul>
-                <li class="product">
-                  <a href="/" target="_blank">
+                <li class="product" v-for="(item, index) in phoneList" :key="index">
+                  <a :href="'/#/product/'+item.id" target="_blank">
                     <div class="pro-img">
                       <img
-                        src="/imgs/nav-img/nav-3-1.jpg"
-                        alt="">
+                        :src="item.mainImage"
+                        :alt="item.subtitle">
                     </div>
-                    <div class="pro-name">小米壁画电视 65英寸</div>
-                    <div class="pro-price">6999元</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img
-                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3bf20f1df3f2e22c5b29ff07634f3c59.png?thumb=1&w=200&h=138&f=webp&q=90"
-                        alt="">
-                    </div>
-                    <div class="pro-name">小米CC9</div>
-                    <div class="pro-price">1799元</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img
-                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3bf20f1df3f2e22c5b29ff07634f3c59.png?thumb=1&w=200&h=138&f=webp&q=90"
-                        alt="">
-                    </div>
-                    <div class="pro-name">小米CC9</div>
-                    <div class="pro-price">1799元</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img
-                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3bf20f1df3f2e22c5b29ff07634f3c59.png?thumb=1&w=200&h=138&f=webp&q=90"
-                        alt="">
-                    </div>
-                    <div class="pro-name">小米CC9</div>
-                    <div class="pro-price">1799元</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img
-                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3bf20f1df3f2e22c5b29ff07634f3c59.png?thumb=1&w=200&h=138&f=webp&q=90"
-                        alt="">
-                    </div>
-                    <div class="pro-name">小米CC9</div>
-                    <div class="pro-price">1799元</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img
-                        src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3bf20f1df3f2e22c5b29ff07634f3c59.png?thumb=1&w=200&h=138&f=webp&q=90"
-                        alt="">
-                    </div>
-                    <div class="pro-name">小米CC9</div>
-                    <div class="pro-price">1799元</div>
+                    <div class="pro-name">{{item.name}}</div>
+                    <div class="pro-price">{{item.price|currency}}</div>
                   </a>
                 </li>
               </ul>
