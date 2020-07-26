@@ -183,35 +183,6 @@ export default {
         position: relative;
         height: 112px;
         @include flex();
-
-        .header-logo {
-          display: inline-block;
-          width: 55px;
-          height: 55px;
-          background: #ff6600;
-
-          a {
-            display: inline-block;
-            width: 110px;
-
-            &:before {
-              content: '';
-              @include bgImg(55px, 55px, "/imgs/mi-logo.png");
-              transition: margin 0.2s;
-            }
-
-            &:after {
-              content: '';
-              @include bgImg(55px, 55px, "/imgs/mi-home.png");
-            }
-
-            &:hover:before {
-              margin-left: -55px;
-              transition: margin 0.2s;
-            }
-          }
-        }
-
         .header-menu {
           display: inline-block;
           width: 643px;
@@ -235,21 +206,23 @@ export default {
               .children {
                 opacity: 1;
                 height: 220px;
-                transition: all 0.2s;
+                transition: all 0.5s;
               }
             }
 
             .children {
-              display: inline-block;
               position: absolute;
               top: 112px;
               left: 0;
               width: 1226px;
+              height: 0;
               opacity: 0;
               overflow: hidden;
               border-top: 1px solid #e5e5e5;
               box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.11);
               z-index: 10;
+              background-color: #ffffff;
+              transition:all .5s;
 
               .product {
                 float: left;
@@ -295,6 +268,33 @@ export default {
                   color: $colorA;
                 }
               }
+            }
+          }
+        }
+        .header-logo {
+          display: inline-block;
+          width: 55px;
+          height: 55px;
+          background: #ff6600;
+
+          a {
+            display: inline-block;
+            width: 110px;
+
+            &:before {
+              content: '';
+              @include bgImg(55px, 55px, "/imgs/mi-logo.png");
+              transition: margin 0.2s;
+            }
+
+            &:after {
+              content: '';
+              @include bgImg(55px, 55px, "/imgs/mi-home.png");
+            }
+
+            &:hover:before {
+              margin-left: -55px;
+              transition: margin 0.2s;
             }
           }
         }
