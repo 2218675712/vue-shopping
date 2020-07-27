@@ -59,7 +59,37 @@
           <img src="/imgs/banner-1.png" alt="">
         </a>
       </div>
-      <div class="product-box"></div>
+
+    </div>
+    <div class="product-box">
+      <div class="container">
+        <h2>手机</h2>
+        <div class="wrapper">
+          <div class="banner-left">
+            <a href="/#/product/35">
+              <img src="/imgs/mix-alpha.jpg" alt="">
+            </a>
+          </div>
+          <div class="list-box">
+            <div class="list" v-for="(arr,i) in phoneList" :key="i">
+              <div class="item" v-for="(item,j) in arr" :key="j">
+                <span>新品</span>
+                <div class="item-img">
+                  <img
+                    src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8729282b199b3ec51e31c1b6b15f3f93.jpg?thumb=1&w=250&h=250&f=webp&q=90"
+                    alt="">
+                </div>
+                <div class="item-info">
+                  <h3>小米9</h3>
+                  <p>晓龙855,索尼4800万超广角微距</p>
+                  <p class="price">2999</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <service-bar></service-bar>
   </div>
@@ -161,7 +191,8 @@ export default {
           id: 47,
           img: '/imgs/ads/ads-4.jpg'
         }
-      ]
+      ],
+      phoneList: [[1, 1, 1, 1], [1, 1, 1, 1]]
 
     }
   }
@@ -268,17 +299,103 @@ export default {
         }
       }
     }
-    .ads-box{
+
+    .ads-box {
       @include flex();
       margin-top: 14px;
       margin-bottom: 31px;
-      a{
+
+      a {
         width: 296px;
         height: 167px;
       }
     }
-    .banner{
+
+    .banner {
       margin-bottom: 50px;
+    }
+
+    .product-box {
+      background: $colorJ;
+      padding: 30px 0 50px;
+
+      h2 {
+        font-size: $fontF;
+        height: 21px;
+        line-height: 21px;
+        color: $colorB;
+        margin-bottom: 20px;
+      }
+
+      .wrapper {
+        display: flex;
+
+        .banner-left {
+          margin-right: 16px;
+
+          img {
+            width: 224px;
+            height: 619px;
+          }
+        }
+
+        .list-box {
+          .list {
+            @include flex();
+            width: 985px;
+            margin-bottom: 14px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .item {
+              width: 236px;
+              height: 302px;
+              background-color: $colorG;
+              text-align: center;
+
+              span {
+
+              }
+
+              .item-img {
+                img {
+
+                  height: 195px;
+                }
+              }
+
+              h3 {
+                font-size: $fontJ;
+                color: $colorB;
+                line-height: $fontJ;
+                font-weight: bold;
+              }
+
+              p {
+                color: $colorD;
+                line-height: 13px;
+                margin: 6px 0 13px;
+              }
+
+              .price {
+                color: #f20a0a;
+                font-size: $fontJ;
+                font-weight: bold;
+                cursor: pointer;
+
+                &:after {
+                  content: '';
+                  @include bgImg(22px, 22px, '/imgs/icon-cart-hover.png');
+                  margin-left: 5px;
+                  vertical-align: middle;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 </style>
