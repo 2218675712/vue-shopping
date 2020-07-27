@@ -92,6 +92,11 @@
 
     </div>
     <service-bar></service-bar>
+    <Modal title="提示" sure-text="查看购物车" btn-type="1" modal-type="middle" :show-modal="showModal">
+      <template v-slot:body>
+        <p>商品添加成功</p>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -99,13 +104,15 @@
 import ServiceBar from '../components/ServiceBar'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
+import Modal from '../components/Modal'
 
 export default {
   name: 'index',
   components: {
     Swiper,
     SwiperSlide,
-    ServiceBar
+    ServiceBar,
+    Modal
   },
   data () {
     return {
@@ -192,7 +199,8 @@ export default {
           img: '/imgs/ads/ads-4.jpg'
         }
       ],
-      phoneList: [[1, 1, 1, 1], [1, 1, 1, 1]]
+      phoneList: [[1, 1, 1, 1], [1, 1, 1, 1]],
+      showModal: false
 
     }
   },
@@ -207,9 +215,10 @@ export default {
       this.axios.get('/products/', {
         params: {
           categoryId: 100012,
-          pageSize: 8
+          pageSize: 14
         }
       }).then((res) => {
+        res.list = res.list.slice(6, 14)
         this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)]
       })
     }
