@@ -11,7 +11,7 @@
                   <li v-for="(sub,j) in item" :key="j">
                     <a :href="sub?'/#/product/'+sub.id:''">
                       <img :src="sub?sub.img:'/imgs/item-box-1.png'" alt="">
-                      {{sub?sub.name:'小米9'}}
+                      {{ sub ? sub.name : '小米9' }}
                     </a>
                   </li>
                 </ul>
@@ -73,16 +73,16 @@
           <div class="list-box">
             <div class="list" v-for="(arr,i) in phoneList" :key="i">
               <div class="item" v-for="(item,j) in arr" :key="j">
-                <span>新品</span>
+                <span :class="{'new-pro':j%2===0}">新品</span>
                 <div class="item-img">
                   <img
-                    src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8729282b199b3ec51e31c1b6b15f3f93.jpg?thumb=1&w=250&h=250&f=webp&q=90"
+                    :src="item.mainImage"
                     alt="">
                 </div>
                 <div class="item-info">
-                  <h3>小米9</h3>
-                  <p>晓龙855,索尼4800万超广角微距</p>
-                  <p class="price">2999</p>
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.subtitle }}</p>
+                  <p class="price">{{ item.price }}元</p>
                 </div>
               </div>
             </div>
@@ -195,202 +195,233 @@ export default {
       phoneList: [[1, 1, 1, 1], [1, 1, 1, 1]]
 
     }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    /**
+     * 获取手机列表
+     */
+    init () {
+      this.axios.get('/products/', {
+        params: {
+          categoryId: 100012,
+          pageSize: 8
+        }
+      }).then((res) => {
+        this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)]
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/scss/config";
-  @import "../assets/scss/mixin";
+@import "../assets/scss/config";
+@import "../assets/scss/mixin";
 
-  .index {
-    .swiper-box {
-      position: relative;
+.index {
+  .swiper-box {
+    position: relative;
 
-      .nav-menu {
-        position: absolute;
-        height: 451px;
-        width: 264px;
-        left: 0;
-        z-index: 9;
-        padding: 26px 0;
-        box-sizing: border-box;
-        background-color: rgba(0, 0, 0, 0.3);
+    .nav-menu {
+      position: absolute;
+      height: 451px;
+      width: 264px;
+      left: 0;
+      z-index: 9;
+      padding: 26px 0;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.3);
 
-        .menu-wrap {
-          .menu-item {
-            height: 50px;
-            line-height: 50px;
+      .menu-wrap {
+        .menu-item {
+          height: 50px;
+          line-height: 50px;
 
-            &:hover {
-              background-color: $colorA;
+          &:hover {
+            background-color: $colorA;
 
-              .children {
-                display: block;
+            .children {
+              display: block;
+            }
+          }
+
+          a {
+            font: $fontI;
+            color: $colorG;
+            padding-left: 30px;
+            position: relative;
+            display: block;
+
+            &:after {
+              content: '';
+              @include bgImg(10px, 15px, '/imgs/icon-arrow.png');
+              position: absolute;
+              right: 30px;
+              top: 17.5px;
+            }
+
+          }
+
+          .children {
+            display: none;
+            width: 962px;
+            height: 451px;
+            background-color: $colorG;
+            position: absolute;
+            top: 0;
+            left: 264px;
+            border: 1px solid $colorH;
+
+            ul {
+              display: flex;
+              justify-content: space-between;
+              height: 75px;
+
+              li {
+                height: 75px;
+                line-height: 75px;
+                flex: 1;
+                padding-left: 23px;
+              }
+
+              a {
+                color: $colorB;
+                font-size: $fontJ;
+              }
+
+              img {
+                width: 42px;
+                height: 35px;
+                vertical-align: middle;
+                margin-right: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .swiper-container {
+      height: 451px;
+
+      .swiper-button-prev {
+        left: 274px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .ads-box {
+    @include flex();
+    margin-top: 14px;
+    margin-bottom: 31px;
+
+    a {
+      width: 296px;
+      height: 167px;
+    }
+  }
+
+  .banner {
+    margin-bottom: 50px;
+  }
+
+  .product-box {
+    background: $colorJ;
+    padding: 30px 0 50px;
+
+    h2 {
+      font-size: $fontF;
+      height: 21px;
+      line-height: 21px;
+      color: $colorB;
+      margin-bottom: 20px;
+    }
+
+    .wrapper {
+      display: flex;
+
+      .banner-left {
+        margin-right: 16px;
+
+        img {
+          width: 224px;
+          height: 619px;
+        }
+      }
+
+      .list-box {
+        .list {
+          @include flex();
+          width: 985px;
+          margin-bottom: 14px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .item {
+            width: 236px;
+            height: 302px;
+            background-color: $colorG;
+            text-align: center;
+
+            span {
+              display: inline-block;
+              width: 67px;
+              height: 24px;
+              font-size: $fontJ;
+              color: $colorG;
+              text-align: center;
+              line-height: 24px;
+
+              &.new-pro {
+                background-color: #7ecf68;
+              }
+
+              &.kill-pro {
+                background-color: #e82626;
               }
             }
 
-            a {
-              font: $fontI;
-              color: $colorG;
-              padding-left: 30px;
-              position: relative;
-              display: block;
+            .item-img {
+              img {
+                width: 100%;
+                height: 195px;
+              }
+            }
+
+            h3 {
+              font-size: $fontJ;
+              color: $colorB;
+              line-height: $fontJ;
+              font-weight: bold;
+            }
+
+            p {
+              color: $colorD;
+              line-height: 13px;
+              margin: 6px 0 13px;
+            }
+
+            .price {
+              color: #f20a0a;
+              font-size: $fontJ;
+              font-weight: bold;
+              cursor: pointer;
 
               &:after {
                 content: '';
-                @include bgImg(10px, 15px, '/imgs/icon-arrow.png');
-                position: absolute;
-                right: 30px;
-                top: 17.5px;
-              }
-
-            }
-
-            .children {
-              display: none;
-              width: 962px;
-              height: 451px;
-              background-color: $colorG;
-              position: absolute;
-              top: 0;
-              left: 264px;
-              border: 1px solid $colorH;
-
-              ul {
-                display: flex;
-                justify-content: space-between;
-                height: 75px;
-
-                li {
-                  height: 75px;
-                  line-height: 75px;
-                  flex: 1;
-                  padding-left: 23px;
-                }
-
-                a {
-                  color: $colorB;
-                  font-size: $fontJ;
-                }
-
-                img {
-                  width: 42px;
-                  height: 35px;
-                  vertical-align: middle;
-                  margin-right: 15px;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .swiper-container {
-        height: 451px;
-
-        .swiper-button-prev {
-          left: 274px;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-
-    .ads-box {
-      @include flex();
-      margin-top: 14px;
-      margin-bottom: 31px;
-
-      a {
-        width: 296px;
-        height: 167px;
-      }
-    }
-
-    .banner {
-      margin-bottom: 50px;
-    }
-
-    .product-box {
-      background: $colorJ;
-      padding: 30px 0 50px;
-
-      h2 {
-        font-size: $fontF;
-        height: 21px;
-        line-height: 21px;
-        color: $colorB;
-        margin-bottom: 20px;
-      }
-
-      .wrapper {
-        display: flex;
-
-        .banner-left {
-          margin-right: 16px;
-
-          img {
-            width: 224px;
-            height: 619px;
-          }
-        }
-
-        .list-box {
-          .list {
-            @include flex();
-            width: 985px;
-            margin-bottom: 14px;
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-
-            .item {
-              width: 236px;
-              height: 302px;
-              background-color: $colorG;
-              text-align: center;
-
-              span {
-
-              }
-
-              .item-img {
-                img {
-
-                  height: 195px;
-                }
-              }
-
-              h3 {
-                font-size: $fontJ;
-                color: $colorB;
-                line-height: $fontJ;
-                font-weight: bold;
-              }
-
-              p {
-                color: $colorD;
-                line-height: 13px;
-                margin: 6px 0 13px;
-              }
-
-              .price {
-                color: #f20a0a;
-                font-size: $fontJ;
-                font-weight: bold;
-                cursor: pointer;
-
-                &:after {
-                  content: '';
-                  @include bgImg(22px, 22px, '/imgs/icon-cart-hover.png');
-                  margin-left: 5px;
-                  vertical-align: middle;
-                }
+                @include bgImg(22px, 22px, '/imgs/icon-cart-hover.png');
+                margin-left: 5px;
+                vertical-align: middle;
               }
             }
           }
@@ -398,4 +429,5 @@ export default {
       }
     }
   }
+}
 </style>
