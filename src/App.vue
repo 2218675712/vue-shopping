@@ -29,4 +29,6 @@ export default {
   @import "./assets/scss/mixin";
   /*引入模态框样式*/
   @import "./assets/scss/modal";
+  /*引入按钮样式*/
+  @import "./assets/scss/button";
 </style>
