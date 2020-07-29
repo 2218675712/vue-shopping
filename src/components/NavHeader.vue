@@ -144,7 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/scss/bass";
+  @import "../assets/scss/base";
   @import "../assets/scss/mixin";
   @import "../assets/scss/config";
 

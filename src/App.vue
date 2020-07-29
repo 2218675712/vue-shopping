@@ -24,7 +24,7 @@ export default {
   /*引入配置样式*/
   @import "./assets/scss/config";
   /*引入自定义样式*/
-  @import "./assets/scss/bass";
+  @import "assets/scss/base";
   /*引入自定义函数*/
   @import "./assets/scss/mixin";
   /*引入模态框样式*/
