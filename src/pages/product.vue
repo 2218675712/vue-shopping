@@ -42,9 +42,10 @@
         <div class="video-bg">
           <div class="video-box">
             <div class="overlay">
-              <div class="video">
-                <video src="/imgs/product/video.mp4"></video>
-              </div>
+            </div>
+            <div class="video">
+              <span class="icon-close"></span>
+              <video src="/imgs/product/video.mp4" muted controls="controls"></video>
             </div>
           </div>
         </div>
@@ -53,14 +54,14 @@
   </div>
 </template>
 <script>
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import ProductParam from '../components/ProductParam'
 
 export default {
   name: 'product',
   components: {
-    swiper,
-    swiperSlide,
+    Swiper,
+    SwiperSlide,
     ProductParam
   },
   data () {
@@ -78,32 +79,11 @@ export default {
         }
       }
     }
-  },
-  mounted () {
-    this.getProductInfo()
-  },
-  methods: {
-    getProductInfo () {
-      const id = this.$route.params.id
-      this.axios.get(`/products/${id}`).then((res) => {
-        this.product = res
-      })
-    },
-    buy () {
-      const id = this.$route.params.id
-      this.$router.push(`/detail/${id}`)
-    },
-    closeVideo () {
-      this.showSlide = 'slideUp'
-      setTimeout(() => {
-        this.showSlide = ''
-      }, 600)
-    }
   }
 }
 </script>
 <style lang="scss">
-@import './../assets/scss/mixin.scss';
+@import '../assets/scss/mixin.scss';
 
 .product {
   .content {
@@ -203,35 +183,15 @@ export default {
       .video-box {
         .overlay {
           @include position(fixed);
-          background-color: #333333;
-          opacity: .4;
+          background-color: #000000;
+          opacity: 0.4;
           z-index: 10;
-        }
 
-        @keyframes slideDown {
-          from {
-            top: -50%;
-            opacity: 0;
-          }
-          to {
-            top: 50%;
-            opacity: 1;
-          }
-        }
-        @keyframes slideUp {
-          from {
-            top: 50%;
-            opacity: 1;
-          }
-          to {
-            top: -50%;
-            opacity: 0;
-          }
         }
 
         .video {
           position: fixed;
-          top: -50%;
+          top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
           z-index: 10;
@@ -239,20 +199,11 @@ export default {
           height: 536px;
           opacity: 1;
 
-          &.slideDown {
-            animation: slideDown .6s linear;
-            top: 50%;
-          }
-
-          &.slideUp {
-            animation: slideUp .6s linear;
-          }
-
           .icon-close {
+            @include bgImg(20px, 20px, '/imgs/icon-close.png');
             position: absolute;
             top: 20px;
             right: 20px;
-            @include bgImg(20px, 20px, '/imgs/icon-close.png');
             cursor: pointer;
             z-index: 11;
           }
