@@ -5,6 +5,7 @@
         <button class="btn">立即购买</button>
       </template>
     </product-param>
+    <div style="height: 5000px"></div>
   </div>
 </template>
 
