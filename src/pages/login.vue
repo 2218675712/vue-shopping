@@ -53,8 +53,9 @@ export default {
         username,
         password
       }).then((res) => {
+        // 保存一个月cookie
         this.$cookie.set('userId', res.id, { expires: '1M' })
-        // TODO 保存用户名
+        this.$store.dispatch('saveUserName', res.username)
         this.$router.push('/index')
       }).catch((res) => {
         alert(res.msg)
