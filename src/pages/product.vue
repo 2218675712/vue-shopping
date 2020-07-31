@@ -39,15 +39,14 @@
       <div class="item-video">
         <h2>60帧超慢动作摄影<br/>慢慢回味每一瞬间的精彩</h2>
         <p>后置960帧电影般超慢动作视频，将眨眼间的美妙展现得淋漓尽致！<br/>更能AI 精准分析视频内容，15个场景智能匹配背景音效。</p>
-        <div class="video-bg" @click="showSlide=true"></div>
-        <div class="video-box">
-          <div class="overlay" v-if="showSlide">
+        <div class="video-bg" @click="showSlide='slideDown'"></div>
+          <div class="video-box">
+            <div class="overlay" v-if="showSlide==='slideDown'"></div>
+            <div class="video" :class="showSlide">
+              <span class="icon-close" @click="showSlide='slideUp'"></span>
+              <video src="/imgs/product/video.mp4" muted controls="controls"></video>
+            </div>
           </div>
-          <div class="video" :class="{'slide':showSlide}">
-            <span class="icon-close" @click="showSlide=false"></span>
-            <video src="/imgs/product/video.mp4" muted autoplay controls="controls"></video>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -188,6 +187,27 @@ export default {
 
         }
 
+        @keyframes slideDown {
+          from {
+            top: -50%;
+            opacity: 0;
+          }
+          to {
+            top: 50%;
+            opacity: 1;
+          }
+        }
+        @keyframes slideUp {
+          from {
+            top: 50%;
+            opacity: 1;
+          }
+          to {
+            top: -50%;
+            opacity: 0;
+          }
+        }
+
         .video {
           position: fixed;
           top: -50%;
@@ -196,12 +216,14 @@ export default {
           z-index: 10;
           width: 1000px;
           height: 536px;
-          transition: all 0.6s;
-          opacity: 0;
+          opacity: 1;
 
-          &.slide {
+          &.slideDown {
+            animation: slideDown 0.6s linear;
             top: 50%;
-            opacity: 1;
+          }
+          &.slideUp {
+            animation: slideUp 0.6s linear;
           }
 
           .icon-close {
