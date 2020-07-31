@@ -39,14 +39,13 @@
       <div class="item-video">
         <h2>60帧超慢动作摄影<br/>慢慢回味每一瞬间的精彩</h2>
         <p>后置960帧电影般超慢动作视频，将眨眼间的美妙展现得淋漓尽致！<br/>更能AI 精准分析视频内容，15个场景智能匹配背景音效。</p>
-        <div class="video-bg">
-          <div class="video-box">
-            <div class="overlay">
-            </div>
-            <div class="video">
-              <span class="icon-close"></span>
-              <video src="/imgs/product/video.mp4" muted controls="controls"></video>
-            </div>
+        <div class="video-bg" @click="showSlide=true"></div>
+        <div class="video-box">
+          <div class="overlay" v-if="showSlide">
+          </div>
+          <div class="video" :class="{'slide':showSlide}">
+            <span class="icon-close" @click="showSlide=false"></span>
+            <video src="/imgs/product/video.mp4" muted autoplay controls="controls"></video>
           </div>
         </div>
       </div>
@@ -183,7 +182,7 @@ export default {
       .video-box {
         .overlay {
           @include position(fixed);
-          background-color: #000000;
+          background-color: #333333;
           opacity: 0.4;
           z-index: 10;
 
@@ -191,13 +190,19 @@ export default {
 
         .video {
           position: fixed;
-          top: 50%;
+          top: -50%;
           left: 50%;
           transform: translate(-50%, -50%);
           z-index: 10;
           width: 1000px;
           height: 536px;
-          opacity: 1;
+          transition: all 0.6s;
+          opacity: 0;
+
+          &.slide {
+            top: 50%;
+            opacity: 1;
+          }
 
           .icon-close {
             @include bgImg(20px, 20px, '/imgs/icon-close.png');
