@@ -1,14 +1,14 @@
 <template>
   <div class="product">
-    <product-param>
+    <product-param :title="product.name">
       <template v-slot:buy>
-        <button class="btn">立即购买</button>
+        <button class="btn" @click="buy">立即购买</button>
       </template>
     </product-param>
     <div class="content">
       <div class="item-bg">
-        <h2>小米8</h2>
-        <h3>八周年纪念版</h3>
+        <h2>{{ product.name }}</h2>
+        <h3>{{ product.subtitle }}</h3>
         <p>
           <a href="" id="">全球首款双频 GP</a>
           <span>|</span>
@@ -19,7 +19,7 @@
           <a href="" id="">红外人脸识别</a>
         </p>
         <div class="price">
-          <span>￥<em>2999</em></span>
+          <span>￥<em>{{ product.price }}</em></span>
         </div>
       </div>
       <div class="item-bg-2"></div>
@@ -40,13 +40,13 @@
         <h2>60帧超慢动作摄影<br/>慢慢回味每一瞬间的精彩</h2>
         <p>后置960帧电影般超慢动作视频，将眨眼间的美妙展现得淋漓尽致！<br/>更能AI 精准分析视频内容，15个场景智能匹配背景音效。</p>
         <div class="video-bg" @click="showSlide='slideDown'"></div>
-          <div class="video-box">
-            <div class="overlay" v-if="showSlide==='slideDown'"></div>
-            <div class="video" :class="showSlide">
-              <span class="icon-close" @click="showSlide='slideUp'"></span>
-              <video src="/imgs/product/video.mp4" muted controls="controls"></video>
-            </div>
+        <div class="video-box" v-if="showSlide">
+          <div class="overlay" v-if="showSlide==='slideDown'"></div>
+          <div class="video" :class="showSlide">
+            <span class="icon-close" @click="closeVideo"></span>
+            <video src="/imgs/product/video.mp4" muted controls="controls"></video>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -76,6 +76,36 @@ export default {
           clickable: true
         }
       }
+    }
+  },
+  mounted () {
+    this.getProductInfo()
+  },
+  methods: {
+    /**
+     * 获取手机配置信息
+     */
+    getProductInfo () {
+      const id = this.$route.params.id
+      this.axios.get(`/products/${id}`).then((res) => {
+        this.product = res
+      })
+    },
+    /**
+     * 跳转购买页
+     */
+    buy () {
+      const id = this.$route.params.id
+      this.$router.push(`/detail/${id}`)
+    },
+    /**
+     * 关闭动画
+     */
+    closeVideo () {
+      this.showSlide = 'slideUp'
+      setTimeout(() => {
+        this.showSlide = ''
+      }, 600)
     }
   }
 }
@@ -222,6 +252,7 @@ export default {
             animation: slideDown 0.6s linear;
             top: 50%;
           }
+
           &.slideUp {
             animation: slideUp 0.6s linear;
           }
