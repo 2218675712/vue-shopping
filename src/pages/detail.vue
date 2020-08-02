@@ -1,7 +1,6 @@
 <template>
   <div class="detail">
-<!--    <product-param :title="product.name"></product-param>-->
-    <product-param></product-param>
+    <product-param :title="product.name"></product-param>
     <div class="wrapper">
       <div class="container clearfix">
         <div class="swiper">
@@ -28,8 +27,8 @@
           </div>
           <div class="item-version clearfix">
             <h2>选择版本</h2>
-            <div class="phone fl">6GB+64GB 全网通</div>
-            <div class="phone fr">4GB+64GB 移动4G</div>
+            <div class="phone fl"  :class="{'checked':version==1}" @click="version=1">6GB+64GB 全网通</div>
+            <div class="phone fr"  :class="{'checked':version==2}" @click="version=2">4GB+64GB 移动4G</div>
           </div>
           <div class="item-color">
             <h2>选择颜色</h2>
@@ -40,13 +39,13 @@
           </div>
           <div class="item-total">
             <div class="phone-info clearfix">
-              <div class="fl">深灰色</div>
-              <div class="fr">0元</div>
+              <div class="fl">{{product.name}}{{version==1?'6GB+64GB 全网通':'4GB+64GB 移动4G'}}深灰色</div>
+              <div class="fr">{{product.price}}元</div>
             </div>
-            <div class="phone-total">总计：0元</div>
+            <div class="phone-total">总计：{{product.price}}元</div>
           </div>
           <div class="btn-group">
-            <a href="javascript:" class="btn btn-huge fl">加入购物车</a>
+            <a href="javascript:" class="btn btn-huge fl" @click="addCart(product.id)">加入购物车</a>
           </div>
         </div>
       </div>
@@ -97,6 +96,15 @@ export default {
     getProductInfo () {
       this.axios.get(`/products/${this.id}`).then((res) => {
         this.product = res
+      })
+    },
+    addCart () {
+      this.axios.post('/carts', {
+        productId: this.id,
+        selected: true
+      }).then((res = { cartProductVoList: 0 }) => {
+        this.$store.dispatch('saveCartCount', res.cartTotalQuantity)
+        this.$router.push('/cart')
       })
     }
   }
