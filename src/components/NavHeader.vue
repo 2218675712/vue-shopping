@@ -279,7 +279,6 @@ export default {
           }
         }
 
-
         .header-search {
           width: 319px;
 
