@@ -278,33 +278,7 @@ export default {
             }
           }
         }
-        .header-logo {
-          display: inline-block;
-          width: 55px;
-          height: 55px;
-          background: #ff6600;
 
-          a {
-            display: inline-block;
-            width: 110px;
-
-            &:before {
-              content: '';
-              @include bgImg(55px, 55px, "/imgs/mi-logo.png");
-              transition: margin 0.2s;
-            }
-
-            &:after {
-              content: '';
-              @include bgImg(55px, 55px, "/imgs/mi-home.png");
-            }
-
-            &:hover:before {
-              margin-left: -55px;
-              transition: margin 0.2s;
-            }
-          }
-        }
 
         .header-search {
           width: 319px;
