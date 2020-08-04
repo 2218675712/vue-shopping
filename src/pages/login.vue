@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'login',
   data () {
@@ -58,7 +59,7 @@ export default {
         this.$store.dispatch('saveUserName', res.username)
         this.$router.push('/index')
       }).catch((res) => {
-        alert(res.msg)
+        this.$message.info(res.msg)
       })
     },
     register () {
@@ -67,7 +68,7 @@ export default {
         password: '',
         email: ''
       }).then((res) => {
-        alert('注册成功')
+        this.$message.success('注册成功')
       })
     }
   }

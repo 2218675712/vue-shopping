@@ -55,9 +55,9 @@
   </div>
 </template>
 <script>
-import OrderHeader from '@/components/OrderHeader'
-import ServiceBar from '@/components/ServiceBar'
-import NavFooter from '@/components/NavFooter'
+import OrderHeader from '../components/OrderHeader'
+import ServiceBar from '../components/ServiceBar'
+import NavFooter from '../components/NavFooter'
 
 export default {
   name: 'index',
@@ -88,13 +88,13 @@ export default {
       let selected = item.productSelected
       if (type === '-') {
         if (quantity === 1) {
-          alert('商品至少保留一件')
+          this.$message.warning('商品至少保留一件')
           return
         }
         --quantity
       } else if (type === '+') {
         if (quantity > item.productStock) {
-          alert('购买商品不能超过库存数量')
+          this.$message.warning('购买商品不能超过库存数量')
           return
         }
         ++quantity
@@ -113,6 +113,7 @@ export default {
     * */
     delProduct (item) {
       this.axios.delete(`/carts/${item.productId}`).then((res) => {
+        this.$message.info('删除成功')
         this.renderData(res)
       })
     },
@@ -139,7 +140,7 @@ export default {
     order () {
       const isCheck = this.list.every(item => !item.productSelected)
       if (isCheck) {
-        alert('请选择一件商品')
+        this.$message.warning('请选择一件商品')
       } else {
         this.$router.push('/order/confirm')
       }

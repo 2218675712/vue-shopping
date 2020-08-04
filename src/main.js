@@ -5,6 +5,8 @@ import router from './router'
 import store from './store'
 import VueLazyload from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
+import { Message } from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue'
 // import env from './env'
 const moke = false
@@ -34,9 +36,13 @@ Axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(res)
   } else {
+    this.$message.warning(res.msg)
     return Promise.reject(res)
   }
 })
+
+Vue.prototype.$message = Message
+
 Vue.config.productionTip = false
 Vue.use(VueLazyload, {
   loading: '/imgs/loading-svg/loading-bars.svg'
