@@ -9,12 +9,13 @@
           <a href="javascript:">协议规则</a>
         </div>
         <div class="topbar-user">
-          <a href="javascript:" v-if="username">{{username}}</a>
+          <a href="javascript:" v-if="username">{{ username }}</a>
           <a href="javascript:" v-if="!username" @click="login">登录</a>
+          <a href="javascript:" v-if="username" @click="logout">退出</a>
           <a href="javascript:" v-if="username">我的订单</a>
           <a href="javascript:" class="my-cart" @click="goToCart">
             <span class="icon-cart"></span>
-            购物车({{cartCount}})
+            购物车({{ cartCount }})
           </a>
         </div>
       </div>
@@ -36,8 +37,8 @@
                         :src="item.mainImage"
                         :alt="item.subtitle">
                     </div>
-                    <div class="pro-name">{{item.name}}</div>
-                    <div class="pro-price">{{item.price|currency}}</div>
+                    <div class="pro-name">{{ item.name }}</div>
+                    <div class="pro-price">{{ item.price|currency }}</div>
                   </a>
                 </li>
               </ul>
@@ -54,8 +55,8 @@
                         :src="item.mainImage"
                         :alt="item.subtitle">
                     </div>
-                    <div class="pro-name">{{item.name}}</div>
-                    <div class="pro-price">{{item.price|currency}}</div>
+                    <div class="pro-name">{{ item.name }}</div>
+                    <div class="pro-price">{{ item.price|currency }}</div>
                   </a>
                 </li>
               </ul>
@@ -73,8 +74,8 @@
                         :src="item.mainImage"
                         :alt="item.subtitle">
                     </div>
-                    <div class="pro-name">{{item.name}}</div>
-                    <div class="pro-price">{{item.price|currency}}</div>
+                    <div class="pro-name">{{ item.name }}</div>
+                    <div class="pro-price">{{ item.price|currency }}</div>
                   </a>
                 </li>
               </ul>
@@ -93,6 +94,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'NavHeader',
   data () {
@@ -116,6 +119,10 @@ export default {
   },
   mounted () {
     this.getProductList()
+    const params = this.$route.params
+    if (params && params.from === 'login') {
+      this.getCartCount()
+    }
   },
   methods: {
     /**
@@ -145,165 +152,189 @@ export default {
      */
     login () {
       this.$router.push('/login')
+    },
+    /**
+     * 退出功能
+     */
+    logout () {
+      this.axios.post('/user/logout').then(() => {
+        this.$message.success('退出成功')
+        this.$cookie.set('userId', '', { expires: '-1' })
+        // this.$store.dispatch('saveUserName', '')
+        // this.$store.dispatch('saveCartCount', 0)
+        this.saveUserName('')
+        this.saveCartCount(0)
+      })
+    },
+    ...mapActions(['saveUserName', 'saveCartCount']),
+    /**
+     * 获取购物车数量
+     */
+    getCartCount () {
+      this.axios.get('/carts/products/sum').then((res = 0) => {
+        this.$store.dispatch('saveCartCount', res)
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/scss/base";
-  @import "../assets/scss/mixin";
-  @import "../assets/scss/config";
+@import "../assets/scss/base";
+@import "../assets/scss/mixin";
+@import "../assets/scss/config";
 
-  .header {
-    .nav-topbar {
-      height: 39px;
-      line-height: 39px;
-      background-color: #333333;
-      color: #b0b0b0;
+.header {
+  .nav-topbar {
+    height: 39px;
+    line-height: 39px;
+    background-color: #333333;
+    color: #b0b0b0;
 
-      .container {
-        @include flex();
+    .container {
+      @include flex();
 
-        a {
-          display: inline-block;
-          color: #b0b0b0;
-          margin-right: 17px;
-        }
+      a {
+        display: inline-block;
+        color: #b0b0b0;
+        margin-right: 17px;
+      }
 
-        .my-cart {
-          width: 110px;
-          background-color: #ff6600;
-          color: #ffffff;
-          text-align: center;
-          margin-right: 0;
-          .icon-cart {
-            @include bgImg(16px, 12px, "/imgs/icon-cart-checked.png");
-            margin-right: 10px;
-          }
+      .my-cart {
+        width: 110px;
+        background-color: #ff6600;
+        color: #ffffff;
+        text-align: center;
+        margin-right: 0;
+
+        .icon-cart {
+          @include bgImg(16px, 12px, "/imgs/icon-cart-checked.png");
+          margin-right: 10px;
         }
       }
     }
+  }
 
-    .nav-header {
-      .container {
-        position: relative;
-        height: 112px;
-        @include flex();
-        .header-menu {
+  .nav-header {
+    .container {
+      position: relative;
+      height: 112px;
+      @include flex();
+
+      .header-menu {
+        display: inline-block;
+        width: 643px;
+        padding-left: 209px;
+
+        .item-menu {
           display: inline-block;
-          width: 643px;
-          padding-left: 209px;
+          color: #333333;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 112px;
+          margin-right: 20px;
 
-          .item-menu {
-            display: inline-block;
-            color: #333333;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 112px;
-            margin-right: 20px;
+          span {
+            cursor: pointer;
+          }
 
-            span {
-              cursor: pointer;
-            }
-
-            &:hover {
-              color: $colorA;
-
-              .children {
-                opacity: 1;
-                height: 220px;
-                transition: all 0.5s;
-              }
-            }
+          &:hover {
+            color: $colorA;
 
             .children {
-              position: absolute;
-              top: 112px;
-              left: 0;
-              width: 1226px;
-              height: 0;
-              opacity: 0;
-              overflow: hidden;
-              border-top: 1px solid #e5e5e5;
-              box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.11);
-              z-index: 10;
-              background-color: #ffffff;
-              transition:all .5s;
+              opacity: 1;
+              height: 220px;
+              transition: all 0.5s;
+            }
+          }
 
-              .product {
-                float: left;
-                width: 16.6%;
-                height: 220px;
-                font-size: 12px;
-                line-height: 12px;
-                text-align: center;
-                position: relative;
+          .children {
+            position: absolute;
+            top: 112px;
+            left: 0;
+            width: 1226px;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            border-top: 1px solid #e5e5e5;
+            box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.11);
+            z-index: 10;
+            background-color: #ffffff;
+            transition: all .5s;
 
-                &:not(:last-child):before {
-                  content: '';
-                  position: absolute;
-                  top: 28px;
-                  right: 0;
-                  width: 1px;
-                  height: 100px;
-                  border-left: 1px solid $colorF;
-                }
+            .product {
+              float: left;
+              width: 16.6%;
+              height: 220px;
+              font-size: 12px;
+              line-height: 12px;
+              text-align: center;
+              position: relative;
 
-                a {
-                  display: inline-block;
-                }
+              &:not(:last-child):before {
+                content: '';
+                position: absolute;
+                top: 28px;
+                right: 0;
+                width: 1px;
+                height: 100px;
+                border-left: 1px solid $colorF;
+              }
 
-                img {
-                  width: auto;
-                  height: 111px;
-                  margin-top: 26px;
-                }
+              a {
+                display: inline-block;
+              }
 
-                .pro-img {
-                  height: 137px;
-                }
+              img {
+                width: auto;
+                height: 111px;
+                margin-top: 26px;
+              }
 
-                .pro-name {
-                  font-weight: bold;
-                  margin-top: 19px;
-                  margin-bottom: 8px;
-                  color: $colorB;
-                }
+              .pro-img {
+                height: 137px;
+              }
 
-                .pro-price {
-                  color: $colorA;
-                }
+              .pro-name {
+                font-weight: bold;
+                margin-top: 19px;
+                margin-bottom: 8px;
+                color: $colorB;
+              }
+
+              .pro-price {
+                color: $colorA;
               }
             }
           }
         }
+      }
 
-        .header-search {
-          width: 319px;
+      .header-search {
+        width: 319px;
 
-          .wrapper {
+        .wrapper {
+          height: 50px;
+          border: 1px solid #e0e0e0;
+          display: flex;
+          align-items: center;
+
+          input {
+            border: none;
+            border-right: 1px solid #e0e0e0;
+            width: 264px;
             height: 50px;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
+            padding-left: 14px;
+          }
 
-            input {
-              border: none;
-              border-right: 1px solid #e0e0e0;
-              width: 264px;
-              height: 50px;
-              padding-left: 14px;
-            }
-
-            a {
-              @include bgImg(18px, 18px, "/imgs/icon-search.png");
-              margin-left: 10px;
-            }
+          a {
+            @include bgImg(18px, 18px, "/imgs/icon-search.png");
+            margin-left: 10px;
           }
         }
       }
     }
-
   }
+
+}
 </style>
