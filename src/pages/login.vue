@@ -54,7 +54,7 @@ export default {
         username,
         password
       }).then((res) => {
-        // 保存一个月cookie
+        // 保存Session级别的cookie
         this.$cookie.set('userId', res.id, { expires: 'Session' })
         this.$store.dispatch('saveUserName', res.username)
         this.$router.push({

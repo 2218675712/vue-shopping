@@ -108,10 +108,10 @@
 </template>
 
 <script>
-import ServiceBar from '../components/ServiceBar'
+import ServiceBar from '@/components/ServiceBar'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
-import Modal from '../components/Modal'
+import Modal from '@/components/Modal'
 
 export default {
   name: 'index',
