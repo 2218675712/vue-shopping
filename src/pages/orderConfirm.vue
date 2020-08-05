@@ -118,11 +118,51 @@
     <modal
       title="删除确认"
       btn-type='3'
-      :show-modal="showModal"
-      @cancel="showModal=false"
+      :show-modal="showDelModal"
+      @cancel="showDelModal=false"
       @submit="submitAddress">
       <template v-slot:body>
         <p>是否确认删除此地址?</p>
+      </template>
+    </modal>
+    <modal
+      title="添加收货地址"
+      btn-type='3'
+      :show-modal="showEditModal"
+      @cancel="showEditModal=false"
+      @submit="submitAddress">
+      <template v-slot:body>
+        <div class="edit-wrap">
+          <div class="item">
+            <input type="text" placeholder="姓名" class="input">
+            <input type="text" placeholder="手机号" class="input">
+          </div>
+          <div class="item">
+            <select name="province">
+              <option value="北京">北京</option>
+              <option value="天津">天津</option>
+              <option value="河北">河北</option>
+            </select>
+            <select name="city">
+              <option value="北京">北京</option>
+              <option value="天津">天津</option>
+              <option value="河北">石家庄</option>
+            </select>
+            <select name="district">
+              <option value="昌平区">昌平区</option>
+              <option value="海淀区">海淀区</option>
+              <option value="东城区">东城区</option>
+              <option value="西城区">西城区</option>
+              <option value="房山区">房山区</option>
+            </select>
+          </div>
+          <div class="item">
+            <textarea name="street"></textarea>
+          </div>
+          <div class="item">
+            <input type="text" placeholder="邮编" class="input">
+          </div>
+        </div>
       </template>
     </modal>
   </div>
@@ -148,7 +188,9 @@ export default {
       // 用户行为  0 新增  1 编辑  2 删除
       userAction: '',
       // 是否显示删除弹框
-      showModal: false
+      showDelModal: false,
+      // 是否显示 新增/编辑 弹框
+      showEditModal: true
     }
   },
   components: { Modal },
@@ -166,13 +208,29 @@ export default {
       })
     },
     /**
+     * 打开新增地址弹框
+     */
+    openAddressModal () {
+      this.checkedItem = {}
+      this.userAction = 0
+      this.showDelModal = true
+    },
+    /**
+     * 打开编辑地址弹框
+     */
+    editAddressModal () {
+      this.checkedItem = {}
+      this.userAction = 1
+      this.showDelModal = true
+    },
+    /**
      * 删除收货地址
      * @param item
      */
     delAddress (item) {
       this.checkedItem = item
       this.userAction = 2
-      this.showModal = true
+      this.showDelModal = true
     },
     /**
      * 提交收货地址更改数据
@@ -201,9 +259,9 @@ export default {
      * 关闭弹框
      */
     closeModal () {
-      this.checkedItem = { }
       this.userAction = ''
-      this.showModal = false
+      this.checkedItem = {}
+      this.showDelModal = false
     },
     /**
      * 获取购物车数据
@@ -416,7 +474,7 @@ export default {
         height: 40px;
         line-height: 40px;
         padding-left: 15px;
-        border: 1px solid #E5E5E5;
+        border: 1px solid #e5e5e5;
 
         & + .input {
           margin-left: 14px;
@@ -426,7 +484,7 @@ export default {
       select {
         height: 40px;
         line-height: 40px;
-        border: 1px solid #E5E5E5;
+        border: 1px solid #e5e5e5;
         margin-right: 15px;
       }
 
@@ -435,7 +493,6 @@ export default {
         width: 100%;
         padding: 13px 15px;
         box-sizing: border-box;
-        border: 1px solid #E5E5E5;
       }
     }
   }
