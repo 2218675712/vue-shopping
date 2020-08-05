@@ -41,9 +41,12 @@
               <div class="addr-info" v-for="(item,index) in list" :key="index">
                 <h2>{{ item.receiverName }}</h2>
                 <div class="phone">{{ item.receiverMobile }}</div>
-                <div class="street">{{ item.receiverProvince+''+item.receiverCity+''+item.receiverDistrict+''+item.receiverAddress }}</div>
+                <div class="street">{{
+                    item.receiverProvince + '' + item.receiverCity + '' + item.receiverDistrict + '' + item.receiverAddress
+                  }}
+                </div>
                 <div class="action">
-                  <a href="javascript:" class="fl">
+                  <a href="javascript:" class="fl" @click="delAddress(item)">
                     <svg class="icon icon-del">
                       <use xlink:href="#icon-del"></use>
                     </svg>
@@ -67,7 +70,7 @@
               <li v-for="(item,index) in cartList" :key="index">
                 <div class="good-name">
                   <img v-lazy="item.productMainImage">
-                  <span>{{ item.productName+''+item.productSubtitle }}</span>
+                  <span>{{ item.productName + '' + item.productSubtitle }}</span>
                 </div>
                 <div class="good-price">{{ item.productPrice }}元x{{ item.quantity }}</div>
                 <div class="good-total">{{ item.productTotalPrice }}元</div>
@@ -112,9 +115,21 @@
         </div>
       </div>
     </div>
+    <modal
+      title="删除确认"
+      btn-type='3'
+      :show-modal="showModal"
+      @cancel="showModal=false"
+      @submit="submitAddress">
+      <template v-slot:body>
+        <p>是否确认删除此地址?</p>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
+
+import Modal from '@/components/Modal'
 
 export default {
   name: 'orderConfirm',
@@ -127,20 +142,72 @@ export default {
       // 商品总金额
       cartTotalPrice: 0,
       // 商品结算总数量
-      count: 0
+      count: 0,
+      // 选中的地址对象
+      checkedItem: {},
+      // 用户行为  0 新增  1 编辑  2 删除
+      userAction: '',
+      // 是否显示删除弹框
+      showModal: false
     }
   },
-  components: {},
+  components: { Modal },
   mounted () {
     this.getAddressList()
     this.getCartList()
   },
   methods: {
+    /**
+     * 获取收货地址
+     */
     getAddressList () {
       this.axios.get('/shippings').then((res) => {
         this.list = res.list
       })
     },
+    /**
+     * 删除收货地址
+     * @param item
+     */
+    delAddress (item) {
+      this.checkedItem = item
+      this.userAction = 2
+      this.showModal = true
+    },
+    /**
+     * 提交收货地址更改数据
+     */
+    submitAddress () {
+      const { checkedItem, userAction } = this
+      let method = ''
+      let url = ''
+      if (userAction === 0) {
+        method = 'post'
+        url = '/shippings'
+      } else if (userAction === 1) {
+        method = 'put'
+        url = `/shippings/${checkedItem.id}`
+      } else if (userAction === 2) {
+        method = 'delete'
+        url = `/shippings/${checkedItem.id}`
+      }
+      this.axios[method](url).then(() => {
+        this.closeModal()
+        this.getAddressList()
+        this.$message.info('操作成功')
+      })
+    },
+    /**
+     * 关闭弹框
+     */
+    closeModal () {
+      this.checkedItem = { }
+      this.userAction = ''
+      this.showModal = false
+    },
+    /**
+     * 获取购物车数据
+     */
     getCartList () {
       this.axios.get('/carts').then((res) => {
         // 获取购物车中所有的商品数据
