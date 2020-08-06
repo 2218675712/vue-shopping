@@ -8,28 +8,28 @@
             <div class="order-info">
               <h2>订单提交成功！去付款咯～</h2>
               <p>请在<span>30分</span>内完成支付, 超时后将取消订单</p>
-              <p>收货信息：11111</p>
+              <p>收货信息：{{ addressInfo }}</p>
             </div>
             <div class="order-total">
               <p>应付总额：<span>10</span>元</p>
-              <p>订单详情<em class="icon-down"></em></p>
+              <p>订单详情<em class="icon-down" :class="{'up':showDetail}" @click="showDetail=!showDetail"></em></p>
             </div>
           </div>
-          <div class="item-detail">
+          <div class="item-detail" v-if="showDetail">
             <div class="item">
               <div class="detail-title">订单号：</div>
-              <div class="detail-info theme-color">3489573485</div>
+              <div class="detail-info theme-color">{{ orderNo }}</div>
             </div>
             <div class="item">
               <div class="detail-title">收货信息：</div>
-              <div class="detail-info">34875834</div>
+              <div class="detail-info">{{ addressInfo }}</div>
             </div>
             <div class="item good">
               <div class="detail-title">商品名称：</div>
               <div class="detail-info">
                 <ul>
-                  <li>
-                    <img/>43574884
+                  <li v-for="(item,index) in orderDetail" :key="index">
+                    <img v-lazy="item.productImage"/>{{ item.productName }}
                   </li>
                 </ul>
               </div>
@@ -56,7 +56,28 @@
 export default {
   name: 'orderPay',
   data () {
-    return {}
+    return {
+      // 订单编号
+      orderNo: this.$route.query.orderNo,
+      // 收货人信息
+      addressInfo: '',
+      // 订单详情,包含商品列表
+      orderDetail: [],
+      // 是否显示订单详情
+      showDetail: false
+    }
+  },
+  mounted () {
+    this.getOrderDetail()
+  },
+  methods: {
+    getOrderDetail () {
+      this.axios.get(`/orders/${this.orderNo}`).then((res) => {
+        const item = res.shippingVo
+        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`
+        this.orderDetail = res.orderItemVoList
+      })
+    }
   }
 }
 </script>
