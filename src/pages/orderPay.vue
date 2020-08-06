@@ -11,7 +11,7 @@
               <p>收货信息：{{ addressInfo }}</p>
             </div>
             <div class="order-total">
-              <p>应付总额：<span>10</span>元</p>
+              <p>应付总额：<span>{{ payment }}</span>元</p>
               <p>订单详情<em class="icon-down" :class="{'up':showDetail}" @click="showDetail=!showDetail"></em></p>
             </div>
           </div>
@@ -44,8 +44,8 @@
           <h3>选择以下支付方式付款</h3>
           <div class="pay-way">
             <p>支付平台</p>
-            <div class="pay pay-ali"></div>
-            <div class="pay pay-wechat"></div>
+            <div class="pay pay-ali" :class="{'checked':payType===1}" @click="paySubmit(1)"></div>
+            <div class="pay pay-wechat" :class="{'checked':payType===2}" @click="paySubmit(2)"></div>
           </div>
         </div>
       </div>
@@ -58,25 +58,37 @@ export default {
   data () {
     return {
       // 订单编号
-      orderNo: this.$route.query.orderNo,
+      orderId: this.$route.query.orderNo,
       // 收货人信息
       addressInfo: '',
       // 订单详情,包含商品列表
       orderDetail: [],
       // 是否显示订单详情
-      showDetail: false
+      showDetail: false,
+      // 支付类型
+      payType: '',
+      payment: '0.01'
     }
   },
   mounted () {
     this.getOrderDetail()
   },
   methods: {
+    /**
+     * 获取支付页面内容信息
+     */
     getOrderDetail () {
       this.axios.get(`/orders/${this.orderNo}`).then((res) => {
         const item = res.shippingVo
         this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`
         this.orderDetail = res.orderItemVoList
       })
+    },
+    paySubmit (payType) {
+      this.payType = payType
+      if (payType === 1) {
+        window.open('/#/order/alipay/?orderId=' + this.orderId, '_blank')
+      }
     }
   }
 }
