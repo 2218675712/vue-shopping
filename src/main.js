@@ -39,6 +39,10 @@ Axios.interceptors.response.use(function (response) {
     this.$message.warning(res.msg)
     return Promise.reject(res)
   }
+}, (error) => {
+  const res = error.response
+  this.$message.error(res.data.message)
+  return Promise.reject(error)
 })
 
 Vue.prototype.$message = Message
