@@ -46,6 +46,15 @@
               </div>
             </div>
           </div>
+          <el-pagination
+            class="pagination"
+            background
+            layout="prev, pager, next"
+            :page-size="pageSize"
+            :total="total"
+            @current-change="handleCurrentChange"
+          >
+          </el-pagination>
           <no-data v-if="loading===false&&list.length===0"></no-data>
         </div>
       </div>
@@ -57,19 +66,28 @@
 import OrderHeader from '@/components/OrderHeader'
 import Loading from '@/components/Loading'
 import NoData from '@/components/NoData'
+import { Pagination } from 'element-ui'
 
 export default {
   name: 'orderList',
   components: {
     NoData,
     Loading,
-    OrderHeader
+    OrderHeader,
+    // 引入部分组件
+    [Pagination.name]: Pagination
   },
   data () {
     return {
       // 订单信息列表
       list: [],
-      loading: true
+      loading: true,
+      // 当前页
+      pageNum: 1,
+      // 每页查询几条
+      pageSize: 10,
+      // 共几页
+      total: 0
     }
   },
   mounted () {
@@ -80,9 +98,15 @@ export default {
      * 获取订单信息
      */
     getOrderList () {
-      this.axios.get('/orders').then((res) => {
+      this.axios.get('/orders', {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize
+        }
+      }).then((res) => {
         this.loading = false
         this.list = res.list
+        this.total = res.total
       }).catch(() => {
         this.loading = false
       })
@@ -108,6 +132,10 @@ export default {
           orderNo
         }
       })
+    },
+    handleCurrentChange (pageNum) {
+      this.pageNum = pageNum
+      this.getOrderList()
     }
   }
 
@@ -193,19 +221,20 @@ export default {
       .pagination {
         text-align: right;
       }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@import '../assets/scss/config';
+@import '../assets/scss/mixin';
+//因为使用了scoped,只能作用于当前元素,所以无法修改
+.order-list {
+  .order-box {
 
-      .el-pagination.is-background .el-pager li:not(.disabled).active {
-        background-color: #FF6600;
-      }
-
-      .el-button--primary {
-        background-color: #FF6600;
-        border-color: #FF6600;
-      }
-
-      .load-more, .scroll-more {
-        text-align: center;
-      }
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
+      background-color: #ff6600;
+      color: #FFF;
     }
   }
 }
