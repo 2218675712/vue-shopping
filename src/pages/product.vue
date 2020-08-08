@@ -110,8 +110,8 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-@import '../assets/scss/mixin.scss';
+<style lang="scss" scoped>
+@import '../assets/scss/mixin';
 
 .product {
   .content {

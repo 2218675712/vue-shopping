@@ -26,8 +26,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import './../assets/scss/config.scss';
-@import './../assets/scss/mixin.scss';
+@import './../assets/scss/config';
+@import './../assets/scss/mixin';
 
 .scan {
   position: absolute;

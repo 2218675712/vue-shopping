@@ -1,5 +1,10 @@
 <template>
   <div class="order-confirm">
+    <order-header title="订单确认">
+      <template v-slot:tip>
+        <span>请认真填写收货地址</span>
+      </template>
+    </order-header>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          style="position: absolute; width: 0; height: 0; overflow: hidden;">
       <defs>
@@ -175,6 +180,7 @@
 <script>
 
 import Modal from '@/components/Modal'
+import OrderHeader from '@/components/OrderHeader'
 
 export default {
   name: 'orderConfirm',
@@ -200,7 +206,10 @@ export default {
       checkIndex: 0
     }
   },
-  components: { Modal },
+  components: {
+    OrderHeader,
+    Modal
+  },
   mounted () {
     this.getAddressList()
     this.getCartList()
@@ -343,7 +352,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .order-confirm {
   .wrapper {
     background-color: #F5F5F5;

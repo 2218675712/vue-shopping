@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import "../assets/scss/config"
 @import "../assets/scss/mixin"
 @import "../assets/scss/modal"
