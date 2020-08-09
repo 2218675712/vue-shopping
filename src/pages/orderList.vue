@@ -46,15 +46,24 @@
               </div>
             </div>
           </div>
-          <el-pagination
-            class="pagination"
-            background
-            layout="prev, pager, next"
-            :page-size="pageSize"
-            :total="total"
-            @current-change="handleCurrentChange"
+          <el-pagination v-if="false"
+                         class="pagination"
+                         background
+                         layout="prev, pager, next"
+                         :page-size="pageSize"
+                         :total="total"
+                         @current-change="handleCurrentChange"
           >
           </el-pagination>
+          <div class="load-more" v-show="showNextPage">
+            <el-button type="primary" :loading="loading" @click="loadMore">加载更多</el-button>
+          </div>
+          <div class="scroll-more"
+               v-infinite-scroll="scrollMore"
+               infinite-scroll-disabled="busy"
+               infinite-scroll-distance="410">
+            <img src="/imgs/loading-svg/loading-spinning-bubbles.svg" alt="" v-show="loading">
+          </div>
           <no-data v-if="loading===false&&list.length===0"></no-data>
         </div>
       </div>
@@ -66,7 +75,8 @@
 import OrderHeader from '@/components/OrderHeader'
 import Loading from '@/components/Loading'
 import NoData from '@/components/NoData'
-import { Pagination } from 'element-ui'
+import { Button, Pagination } from 'element-ui'
+import infiniteScroll from 'vue-infinite-scroll'
 
 export default {
   name: 'orderList',
@@ -75,19 +85,25 @@ export default {
     Loading,
     OrderHeader,
     // 引入部分组件
-    [Pagination.name]: Pagination
+    [Pagination.name]: Pagination,
+    [Button.name]: Button
   },
+  directives: { infiniteScroll },
   data () {
     return {
       // 订单信息列表
       list: [],
-      loading: true,
+      loading: false,
       // 当前页
       pageNum: 1,
       // 每页查询几条
       pageSize: 10,
       // 共几页
-      total: 0
+      total: 0,
+      // 滚动加载是否触发
+      busy: true,
+      // 加载更多是否显示按钮
+      showNextPage: true
     }
   },
   mounted () {
@@ -98,6 +114,8 @@ export default {
      * 获取订单信息
      */
     getOrderList () {
+      this.loading = true
+      this.busy = true
       this.axios.get('/orders', {
         params: {
           pageNum: this.pageNum,
@@ -105,8 +123,11 @@ export default {
         }
       }).then((res) => {
         this.loading = false
-        this.list = res.list
+        this.busy = false
+        // 数组拼接
+        this.list = this.list.concat(res.list)
         this.total = res.total
+        this.showNextPage = res.hasNextPage
       }).catch(() => {
         this.loading = false
       })
@@ -133,9 +154,53 @@ export default {
         }
       })
     },
+    /**
+     * 分页器分页
+     * 页码改变
+     * @param pageNum 当前页码
+     */
     handleCurrentChange (pageNum) {
       this.pageNum = pageNum
       this.getOrderList()
+    },
+    /**
+     * 加载更多按钮
+     */
+    loadMore () {
+      this.pageNum++
+      this.getOrderList()
+    },
+    /**
+     * 利用vue-infinite-scroll
+     * 滚动加载
+     */
+    scrollMore () {
+      this.busy = true
+      setTimeout(() => {
+        this.pageNum++
+        this.getList()
+      }, 500)
+    },
+    /**
+     * 分页器专用加载
+     */
+    getList () {
+      this.loading = true
+      this.axios.get('/orders', {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize
+        }
+      }).then((res) => {
+        // 数组拼接
+        this.list = this.list.concat(res.list)
+        this.loading = false
+        if (res.hasNextPage) {
+          this.busy = false
+        } else {
+          this.busy = true
+        }
+      })
     }
   }
 
@@ -221,6 +286,10 @@ export default {
       .pagination {
         text-align: right;
       }
+
+      .load-more {
+        text-align: center;
+      }
     }
   }
 }
@@ -235,6 +304,16 @@ export default {
     .el-pagination.is-background .el-pager li:not(.disabled).active {
       background-color: #ff6600;
       color: #FFF;
+    }
+
+    .load-more, .scroll-more {
+      text-align: center;
+
+      .el-button--primary {
+        color: #FFF;
+        background-color: #d95507;
+        border-color: #D95507;
+      }
     }
   }
 }
