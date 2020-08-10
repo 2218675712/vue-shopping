@@ -13,6 +13,10 @@ module.exports = {
       }
     }
   },
-
-  productionSourceMap: false
+  // 不打包map文件
+  productionSourceMap: false,
+  // 删除预加载，真正实现按需加载
+  chainWebpack: (config) => {
+    config.plugins.delete('prefetch')
+  }
 }
